@@ -121,10 +121,9 @@ class HomePage extends StatelessWidget {
                           return HomePageCard(
                             id: game.id,
                             gameName: game.name,
-                            releaseDate: DateTime.now(),
-                            imagePath:
-                                "https://media.rawg.io/media/games/20a/20aa03a10cda45239fe22d035c0ebe64.jpg",
-                            rating: 10,
+                            releaseDate: game.released,
+                            imagePath: game.backgroundImage,
+                            rating: game.rating,
                           );
                         },
                       ),

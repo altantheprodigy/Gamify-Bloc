@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:gamifiy_bloc/model/all_game_response.dart';
-import 'package:gamifiy_bloc/model/all_response_game.dart';
 
 class RemoteDataSource {
   final dio = Dio(BaseOptions(baseUrl: "https://api.rawg.io/api"));

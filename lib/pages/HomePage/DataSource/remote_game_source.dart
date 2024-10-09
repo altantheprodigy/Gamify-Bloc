@@ -17,6 +17,6 @@ class RemoteDataSource {
     // print("${response.statusCode}");
     // final gameResponse = gameResponseModelFromJson(response.data);
     // print(gameResponse.results);
-    return DataGame.fromJson(response.data);
+    return GameResponseModel.fromJson(response.data);
   }
 }

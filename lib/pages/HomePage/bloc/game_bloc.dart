@@ -14,9 +14,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       emit(GameLoading());
       try {
         final result = await remoteDataSource.getGames();
+        print(result.toString());
         emit(GameLoaded(result));
       } catch (e) {
-        emit(GameEror(state.toString()));
+        emit(GameEror(e.toString()));
       }
     });
   }

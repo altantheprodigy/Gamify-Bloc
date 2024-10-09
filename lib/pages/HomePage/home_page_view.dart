@@ -62,7 +62,7 @@ class HomePage extends StatelessWidget {
                 color: AppColors.hargaStat,
               ));
             } else if (state is GameLoaded) {
-              final data = state.games;
+              final data = state.games.results;
               return Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 10.0, horizontal: 10),

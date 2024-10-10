@@ -4,6 +4,7 @@ import 'package:gamifiy_bloc/pages/FavoritePage/favorite_page_view.dart';
 import 'package:gamifiy_bloc/pages/HomePage/DataSource/remote_game_source.dart';
 import 'package:gamifiy_bloc/pages/HomePage/Widgets/home_card.dart';
 import 'package:gamifiy_bloc/pages/HomePage/bloc/game_bloc.dart';
+import 'package:gamifiy_bloc/pages/SearchPage/search_page_view.dart';
 import 'package:gamifiy_bloc/utils/color.dart';
 import 'package:gamifiy_bloc/utils/extension.dart';
 import 'package:gamifiy_bloc/utils/text_style.dart';
@@ -13,6 +14,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final query = TextEditingController();
     return BlocProvider(
       create: (context) =>
           GameBloc(remoteDataSource: RemoteDataSource())..add(LoadGame()),
@@ -73,7 +75,7 @@ class HomePage extends StatelessWidget {
                       children: [
                         Expanded(
                           child: TextField(
-                            controller: TextEditingController(),
+                            controller: query,
                             style: AppTextStyle().descriptionBold(
                                 context, AppColors.cardIconFill),
                             decoration: InputDecoration(
@@ -101,7 +103,13 @@ class HomePage extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 10),
                           child: GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              // query.clear();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) =>  SearchPageView(query: query.toString(),)),
+                              );
+                            },
                             child: Icon(
                               Icons.search,
                               size: 20,

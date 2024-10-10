@@ -144,7 +144,7 @@ class HomePage extends StatelessWidget {
                 child: Text(state.message),
               );
             }
-            return SizedBox();
+            return const SizedBox();
           },
         ),
       ),

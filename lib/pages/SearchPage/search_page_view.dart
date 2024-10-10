@@ -6,7 +6,6 @@ import 'package:gamifiy_bloc/pages/SearchPage/bloc/search_bloc.dart';
 import 'package:gamifiy_bloc/utils/color.dart';
 import 'package:gamifiy_bloc/utils/common_appbar.dart';
 import 'package:gamifiy_bloc/utils/extension.dart';
-import 'package:gamifiy_bloc/utils/text_style.dart';
 
 class SearchPageView extends StatelessWidget {
   final String query;
@@ -23,6 +22,7 @@ class SearchPageView extends StatelessWidget {
         appBar: CommonAppBar(
           title: "Search Page",
           route: () {
+            Navigator.pop(context);
             // Get.back();
           },
         ),

@@ -32,7 +32,7 @@ class DetailPageView extends StatelessWidget {
         appBar: CommonAppBar(
           title: "Detail Page",
           route: () {
-            // Navigate back
+            Navigator.pop(context);
           },
         ),
         body: BlocBuilder<DetailBloc, DetailState>(

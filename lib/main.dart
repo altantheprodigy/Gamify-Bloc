@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gamifiy_bloc/model/db_helper.dart';
 import 'package:gamifiy_bloc/pages/HomePage/home_page_view.dart';
 import 'package:gamifiy_bloc/utils/provider.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Pastikan binding Flutter sudah diinisialisasi
+  await DbHelper.initDb();
   runApp(const MyApp());
 }
 

@@ -1,9 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gamifiy_bloc/model/favorites_model.dart';
+import 'package:intl/intl.dart';
+import 'package:gamifiy_bloc/pages/FavoritePage/bloc/favorite_bloc.dart';
 import 'package:gamifiy_bloc/utils/color.dart';
 import 'package:gamifiy_bloc/utils/extension.dart';
 import 'package:gamifiy_bloc/utils/text_style.dart';
-import 'package:intl/intl.dart';
-
 import '../../../utils/app_responsive.dart';
 
 class FavoriteCard extends StatelessWidget {
@@ -12,24 +15,30 @@ class FavoriteCard extends StatelessWidget {
   final DateTime releaseDate;
   final String imagePath;
   final String rating;
-  const FavoriteCard(
-      {super.key,
-        required this.gameName,
-        required this.releaseDate,
-        required this.imagePath,
-        required this.rating, required this.id});
+
+  const FavoriteCard({
+    super.key,
+    required this.gameName,
+    required this.releaseDate,
+    required this.imagePath,
+    required this.rating,
+    required this.id,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: (){
-        // Get.toNamed("/detail-page", arguments: id);
+      onTap: () {
+        // Navigate to detail page
+        // Navigator.pushNamed(context, "/detail-page", arguments: id);
       },
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 7),
+        margin: const EdgeInsets.symmetric(vertical: 7),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10), color: AppColors.background),
-        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+          borderRadius: BorderRadius.circular(10),
+          color: AppColors.background,
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -38,56 +47,100 @@ class FavoriteCard extends StatelessWidget {
               width: AppResponsive().screenWidth(context) * 0.30,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(12.0),
-                child: Image.network(
-                  imagePath,
+                child: Image.file(
+                  File(imagePath),
                   fit: BoxFit.cover,
                 ),
               ),
             ),
             Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      gameName,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyle()
-                          .descriptionBold(context, AppColors.fontAppBar),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    gameName,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle()
+                        .descriptionBold(context, AppColors.fontAppBar),
+                  ),
+                  Text(
+                    DateFormat('dd-MM-yyyy').format(releaseDate),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyle()
+                        .descriptionBold(context, AppColors.cardIconFill),
+                  ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.star,
+                        size: 15,
+                        color: AppColors.bintang,
+                      ),
+                      Text(
+                        rating,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle()
+                            .descriptionBold(context, AppColors.cardIconFill),
+                      ),
+                    ].withSpaceBetween(width: 5),
+                  ),
+                ],
+              ),
+            ),
+            BlocBuilder<FavoriteBloc, FavoriteState>(
+              builder: (context, state) {
+                if (state is FavoriteLoaded) {
+                  final isFavorite =
+                  state.favorites.any((favorite) => favorite.id == id);
+                  return IconButton(
+                    onPressed: () {
+                      if (isFavorite) {
+                        context.read<FavoriteBloc>().add(
+                          RemoveFavorite(
+                            Favorite(
+                              id: id,
+                              title: gameName,
+                              image: imagePath,
+                              rating: rating,
+                              released: releaseDate.toIso8601String(),
+                            ),
+                          ),
+                        );
+                      } else {
+                        context.read<FavoriteBloc>().add(
+                          AddFavorites(
+                            Favorite(
+                              id: id,
+                              title: gameName,
+                              image: imagePath,
+                              rating: rating,
+                              released: releaseDate.toIso8601String(),
+                            ),
+                          ),
+                        );
+                      }
+                    },
+                    icon: Icon(
+                      Icons.favorite_rounded,
+                      color: isFavorite ? Colors.red : Colors.grey,
+                      size: 20,
                     ),
-                    Text(
-                      DateFormat('dd-MM-yyyy').format(releaseDate),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppTextStyle()
-                          .descriptionBold(context, AppColors.cardIconFill),
-                    ),
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.star,
-                          size: 15,
-                          color: AppColors.bintang,
-                        ),
-                        Text(
-                          rating.toString(),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: AppTextStyle()
-                              .descriptionBold(context, AppColors.cardIconFill),
-                        ),
-                      ].withSpaceBetween(width: 5),
-                    )
-                  ],
-                )),
-        IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.favorite_rounded,
-              color: AppColors.hargaStat,
-              size: 20,
-            ))
+                  );
+                }
+                return IconButton(
+                  onPressed: null,
+                  icon: Icon(
+                    Icons.favorite_rounded,
+                    color: Colors.grey,
+                    size: 20,
+                  ),
+                );
+              },
+            ),
           ].withSpaceBetween(width: 10),
         ),
       ),
